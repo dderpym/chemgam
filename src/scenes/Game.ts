@@ -1,21 +1,22 @@
 import { Model } from "../api/Model";
 import { dimensions } from "../dimensions";
-import { Molecule, processMoleculeString } from "../reactor/Molecule";
+import { processMoleculeString } from "../reactor/Molecule";
 import { Reactor } from "../reactor/Reactor";
 
 export class Game extends Phaser.Scene {
-  private reactor: Reactor;
-  private model: Model;
+  private reactor?: Reactor;
+  private model?: Model;
 
   constructor() {
     super("Game");
   }
 
-  init(data) {
-    this.model = data.model;
+  init(data: any) {
+    this.model = data?.model;
   }
 
   create() {
+    if (!this.model) throw new Error("Model not passed to game object");
     this.reactor = new Reactor(this, undefined, this.model, 900);
 
     this.physics.world.setBounds(
@@ -25,7 +26,7 @@ export class Game extends Phaser.Scene {
       dimensions.height,
     );
 
-    const boundingBox = this.add
+    this.add
       .rectangle(dimensions.width - 600, 0, 600, dimensions.height, 0x1e1e2e)
       .setOrigin(0, 0)
       .setStrokeStyle(2, 0xcba6f7);
@@ -42,9 +43,11 @@ export class Game extends Phaser.Scene {
     const thus = this;
     textBox.setInteractive().on("pointerdown", () => {
       textBox.text = "";
+      // @ts-ignore
       this.rexUI.edit(textBox, {
-        onClose: function (textObject) {
+        onClose: function (textObject: Phaser.GameObjects.Text) {
           const moleculeText = processMoleculeString(textObject.text).trim();
+          if (!thus.reactor) return;
           thus.reactor.makeMolecule(
             moleculeText,
             (dimensions.width - 600) / 2,

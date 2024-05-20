@@ -35,7 +35,9 @@ export class Reactor {
       if (this.onCooldown) return;
 
       //bodged solution
+      //@ts-ignore
       const firstMolecule = a.getObject();
+      //@ts-ignore
       const secondMolecule = b.getObject();
 
       firstMolecule.freeze();
@@ -48,7 +50,9 @@ export class Reactor {
             secondMolecule.getMoleculeString(),
         )
         .then((value) => {
+          //@ts-ignore
           const positionX = (a.x + b.x) / 2;
+          //@ts-ignore
           const positionY = (a.y + b.y) / 2;
 
           const diffMolecules = value.text().trim().split(" + ");

@@ -79,6 +79,7 @@ export class Molecule {
     this.body.onWorldBounds = true;
     this.body.onOverlap = true;
 
+    //@ts-ignore
     this.text.getObject = () => {
       return this;
     };

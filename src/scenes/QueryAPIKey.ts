@@ -29,8 +29,9 @@ export class KeyQuery extends Phaser.Scene {
 
     textBox.setInteractive().on("pointerdown", () => {
       textBox.text = "";
+      //@ts-ignore
       this.rexUI.edit(textBox, {
-        onClose: function (textObject) {
+        onClose: function (textObject:Phaser.GameObjects.Text) {
           if (doneso) return;
 
           const api_key = textObject.text;
