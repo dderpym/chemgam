@@ -2,7 +2,9 @@ import { Model } from "../api/Model";
 import { dimensions } from "../dimensions";
 import { processMoleculeString } from "../reactor/Molecule";
 import { Reactor } from "../reactor/Reactor";
+import Slider from "phaser3-rex-plugins/plugins/slider.js";
 
+const velocityScaler = 1800;
 export class Game extends Phaser.Scene {
   private reactor?: Reactor;
   private model?: Model;
@@ -17,7 +19,12 @@ export class Game extends Phaser.Scene {
 
   create() {
     if (!this.model) throw new Error("Model not passed to game object");
-    this.reactor = new Reactor(this, undefined, this.model, 900);
+    this.reactor = new Reactor(
+      this,
+      undefined,
+      this.model,
+      velocityScaler * 0.5,
+    );
 
     this.physics.world.setBounds(
       0,
@@ -39,6 +46,7 @@ export class Game extends Phaser.Scene {
       })
       .setOrigin(0.5, 0.5)
       .setStroke("#cba6f7", 2);
+
     textBox.setText("New Molecule");
     const thus = this;
     textBox.setInteractive().on("pointerdown", () => {
@@ -55,6 +63,46 @@ export class Game extends Phaser.Scene {
           );
         },
       });
+    });
+
+    const slider = new Slider(
+      this.add
+        .rectangle(
+          dimensions.width - 600 / 2,
+          dimensions.height / 10,
+          50,
+          150,
+          0x45475a,
+        )
+        .setOrigin(0.5, 0.5)
+        .setDepth(1),
+      {},
+    )
+      .setEnable(true)
+      .setEndPoints(
+        dimensions.width - 600 + 50,
+        dimensions.height / 10,
+        dimensions.width - 50,
+        dimensions.height / 10,
+      )
+      .setValue(0.5);
+    this.add
+      .line(
+        0,
+        0,
+        dimensions.width - 600 + 50,
+        dimensions.height / 10,
+        dimensions.width - 50,
+        dimensions.height / 10,
+        0x11111b,
+      )
+      .setOrigin(0, 0)
+      .setLineWidth(20);
+
+    slider.on("valuechange", function (newValue: number) {
+      if (newValue <= 0.01) thus.reactor?.setVelocityMag(0.01 * velocityScaler);
+      //0 K not possible!!
+      else thus.reactor?.setVelocityMag(newValue * velocityScaler);
     });
   }
 }

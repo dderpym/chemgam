@@ -99,6 +99,10 @@ export class Reactor {
 
   setVelocityMag(mag: number) {
     this.velocityMag = mag;
+
+    for (const molecule of this.molecules) {
+      molecule.setSpeed(mag);
+    }
   }
 
   yeetMolecule(molecule: Molecule) {

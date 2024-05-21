@@ -96,4 +96,7 @@ export class Molecule {
   freeze() {
     this.body.destroy();
   }
+  setSpeed(speed: number) {
+    this.body.velocity.setLength(speed);
+  }
 }
