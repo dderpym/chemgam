@@ -3,7 +3,7 @@
 infinite reactions powered by gemini
 made with vite and phaser
 
-#Project SEtup
+#Project Setup
 
 ```bash
 nvm install node
