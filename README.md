@@ -1,6 +1,7 @@
-# chemcraft
+# chemgam
 
 infinite reactions powered by gemini
+made with vite and phaser
 
 #Project SEtup
 
